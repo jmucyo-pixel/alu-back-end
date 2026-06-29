@@ -1,4 +1,4 @@
- #!/usr/bin/python3
+#!/usr/bin/python3
 """Gather employee TODO list progress from REST API."""
 import requests
 import sys
