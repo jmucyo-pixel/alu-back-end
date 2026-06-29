@@ -8,7 +8,6 @@ import urllib.request
 if __name__ == "__main__":
     employee_id = int(sys.argv[1])
     base = "https://jsonplaceholder.typicode.com"
-
     url_user = "{}/users/{}".format(base, employee_id)
     url_todos = "{}/todos?userId={}".format(base, employee_id)
 
@@ -22,8 +21,7 @@ if __name__ == "__main__":
     done = [t for t in todos if t.get("completed") is True]
     total = len(todos)
     num_done = len(done)
-
-    print("Employee {} is done with tasks({}/{}):".format(
-        name, num_done, total))
+    first_line = "Employee {} is done with tasks({}/{}):"
+    print(first_line.format(name, num_done, total))
     for task in done:
         print("\t {}".format(task.get("title")))
