@@ -1,22 +1,27 @@
 #!/usr/bin/python3
-"""Gather employee TODO list progress from REST API."""
-import requests
+"""Script that fetches employee TODO list progress from a REST API."""
+import json
 import sys
+import urllib.request
 
 
 if __name__ == "__main__":
     employee_id = int(sys.argv[1])
-    base = "https://jsonplaceholder.typicode.com"
+    base_url = "https://jsonplaceholder.typicode.com"
 
-    user = requests.get("{}/users/{}".format(base, employee_id)).json()
-    todos = requests.get(
-        "{}/todos".format(base), params={"userId": employee_id}
-    ).json()
+    with urllib.request.urlopen(f"{base_url}/users/{employee_id}") as r:
+        user = json.loads(r.read().decode())
 
-    name = user.get("name")
-    done = [t for t in todos if t.get("completed")]
+    with urllib.request.urlopen(
+        f"{base_url}/todos?userId={employee_id}"
+    ) as r:
+        todos = json.loads(r.read().decode())
 
-    print("Employee {} is done with tasks({}/{}):"
-          .format(name, len(done), len(todos)))
-    for task in done:
-        print("\t {}".format(task.get("title")))
+    employee_name = user.get("name")
+    done_tasks = [task for task in todos if task.get("completed")]
+    total = len(todos)
+    done = len(done_tasks)
+
+    print(f"Employee {employee_name} is done with tasks({done}/{total}):")
+    for task in done_tasks:
+        print(f"\t {task.get('title')}")
